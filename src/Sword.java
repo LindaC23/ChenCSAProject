@@ -9,6 +9,16 @@ public class Sword{
         dodge = dge;
     }
 
+    // getter/setter methods
+    public int getAttack(){
+        return attack;
+    }
+
+    public int getDodge(){
+        return dodge;
+    }
+
+
     // upgrades the sword's stats depending on the letter provided
     // a indicates to increase attack by amt
     // d indicates to increase dodge by amt

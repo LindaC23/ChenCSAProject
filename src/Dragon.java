@@ -9,4 +9,9 @@ public class Dragon{
         level = lvl;
     }
 
+    // method that decreases the dragon's health from an attack
+    public void attackDragon(int atkDmg){
+        health -= atkDmg;
+    }
+
 }

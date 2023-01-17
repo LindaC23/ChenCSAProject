@@ -6,9 +6,9 @@ public class Room{
     private boolean searched;
 
     // constructor
-    public Room(String name, int dragons){
+    public Room(String name){
         this.name = name;
-        numDragons = dragons;
+        numDragons = (int)(Math.random() * 3) + 1;
         cleared = false;
         searched = false;
     }
@@ -35,18 +35,8 @@ public class Room{
         System.out.println("|-----------------------|");
         System.out.println("  You have entered " + name);
         System.out.println("|-----------------------|");
-        for (int i = 0; i < numDragons; i++){
-            System.out.println();
-            System.out.println("  n_ n      / / \\");
-            System.out.println(" /o o/ \\   / /   \\      _");
-            System.out.println("(. .)   \\_/_/__   \\    / >");
-            System.out.println(" V V\\      \\ / \\  \\--//");
-            System.out.println("     \\__________\\ /--/   ");
-            System.out.println("         | |  | |");
-            System.out.println("         '''  '''");
-        }
         System.out.println();
-        System.out.println("          (o_o)        ");
+        System.out.println("            O          ");
         System.out.println("          --|--        ");
         System.out.println("           / \\        ");
     }
