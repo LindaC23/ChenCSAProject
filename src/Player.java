@@ -7,11 +7,15 @@ public class Player{
     private Sword sword;
 
     // constructor
-    public Player(String name, int health, int gold, Sword sword){
+    public Player(String name, int health, int gold){
         this.name = name;
         this.health = health;
         this.gold = gold;
-        this.sword = sword;
+        sword = new Sword(10, 20);
         healthPotStatus = false;
     }
+
+    // method that decreases the player's health from an attack
+    public void takeDamage (int atkDmg) {health -= atkDmg; }
+
 }

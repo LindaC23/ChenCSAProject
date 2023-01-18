@@ -30,14 +30,4 @@ public class Room{
         return searched;
     }
 
-    // other public methods
-    public void enterRoom(){
-        System.out.println("|-----------------------|");
-        System.out.println("  You have entered " + name);
-        System.out.println("|-----------------------|");
-        System.out.println();
-        System.out.println("            O          ");
-        System.out.println("          --|--        ");
-        System.out.println("           / \\        ");
-    }
 }
