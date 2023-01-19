@@ -18,6 +18,9 @@ public class Sword{
         return dodge;
     }
 
+    public void setAttack(int newAttack){ attack = newAttack;}
+
+    public void setDodge(int newDodge){ dodge = newDodge;}
 
     // upgrades the sword's stats depending on the letter provided
     // a indicates to increase attack by amt

@@ -4,6 +4,7 @@ public class DragonSlayer {
     private Player p;
     private Room currentRoom;
     private int topScore;
+    private Dragon currentDragon;
 
     public void play(){
         Scanner scan = new Scanner(System.in);
@@ -34,9 +35,12 @@ public class DragonSlayer {
             p = new Player(name, 100, 0);
             System.out.println(name + ", your goal is to clear 5 rooms of the dragon's lair. Good luck!");
             enterRoom("the Hatchery");
-            printMenu();
-            System.out.print("What's your next move? ");
-            String choice2 = scan.nextLine();
+            while (!(currentRoom.isCleared()) && p.getHealth() > 0){
+                printMenu();
+                System.out.print("What's your next move? ");
+                String choice2 = scan.nextLine();
+                processChoice(choice2);
+            }
         }
 
     }
@@ -49,8 +53,12 @@ public class DragonSlayer {
         System.out.println("----------------------------------");
         if (currentRoom.getNumDragons() == 1){
             System.out.println(currentRoom.getNumDragons() + " dragon has spawned!");
+            currentRoom.spawnDragons();
+            currentDragon = currentRoom.getDragons()[0];
         } else {
             System.out.println(currentRoom.getNumDragons() + " dragons have spawned!");
+            currentRoom.spawnDragons();
+            currentDragon = currentRoom.getDragons()[0];
         }
     }
 
@@ -73,5 +81,43 @@ public class DragonSlayer {
         System.out.println("------------------------------");
     }
 
+    private void processChoice(String choice){
+        if (choice.equals("A") || choice.equals("a")){
+            int dmg = p.dealDamage();
+            System.out.println("You deal " + dmg + " damage to the dragon!");
+            currentDragon.takeDamage(dmg);
+            System.out.println("The dragon now has " + currentDragon.getHealth() + " health.");
+            if (currentDragon.isDead()){
+                System.out.println("You have successfully slain a dragon!");
+                determineReward();
+            } else {
+                int dragonDmg = currentDragon.dealDamage();
+                System.out.println("The dragon attacks you for " + dragonDmg + " damage points!");
+                p.changeHealth(-1 * dragonDmg);
+                System.out.println("You now have " + p.getHealth() + " health.");
+            }
+        }
+    }
+
+    private void determineReward(){
+        int reward = (int)(Math.random() * 4) + 1;
+        if (reward == 1){
+            int gold = (int)(Math.random() * 50) + 10;
+            System.out.println("The dragon has dropped " + gold + " gold!");
+            System.out.println("You receive " + gold + " gold!");
+            p.setGold(p.getGold() + gold);
+        } else if (reward == 2){
+            int upgrade = (int)(Math.random() * 5) + 1;
+            System.out.println("The dragon has dropped a sword upgrade!");
+            System.out.println("You pick it up and apply it to your sword!");
+            p.getSword().setAttack(p.getSword().getAttack() + upgrade);
+            System.out.println("Your sword now has an attack of " + p.getSword().getAttack() + "!");
+        } else if (reward == 3){
+            System.out.println("You've earned back 25 points of health!");
+            p.changeHealth(25);
+        } else {
+            System.out.println("You got nothing!");
+        }
+    }
 
 }
