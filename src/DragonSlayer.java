@@ -4,6 +4,7 @@ public class DragonSlayer {
     private Player p;
     private Room currentRoom;
     private int topScore;
+    private int roomsCleared;
     private Dragon currentDragon;
 
     public void play(){
@@ -35,11 +36,13 @@ public class DragonSlayer {
             p = new Player(name, 100, 0);
             System.out.println(name + ", your goal is to clear 5 rooms of the dragon's lair. Good luck!");
             enterRoom("the Hatchery");
-            while (!(currentRoom.isCleared()) && p.getHealth() > 0){
-                printMenu();
-                System.out.print("What's your next move? ");
-                String choice2 = scan.nextLine();
-                processChoice(choice2);
+            while (p.getHealth() > 0 && roomsCleared < 5){
+                while (!(currentRoom.isCleared())){
+                    printMenu();
+                    System.out.print("What's your next move? ");
+                    String choice2 = scan.nextLine();
+                    processChoice(choice2);
+                }
             }
         }
 
@@ -82,6 +85,7 @@ public class DragonSlayer {
     }
 
     private void processChoice(String choice){
+        Scanner scan = new Scanner(System.in);
         if (choice.equals("A") || choice.equals("a")){
             int dmg = p.dealDamage();
             System.out.println("You deal " + dmg + " damage to the dragon!");
@@ -97,8 +101,47 @@ public class DragonSlayer {
                 System.out.println("You now have " + p.getHealth() + " health.");
             }
         }
+        if (choice.equals("I") || choice.equals("i")){
+            System.out.println("You inspect the dragon's level. It appears to be a level " + currentDragon.getLevel() + " dragon!");
+        }
+        if (choice.equals("C") || choice.equals("c")){
+            System.out.println("You check your health. You have " + p.getHealth() + " health!");
+        }
+        if (choice.equals("V") || choice.equals("v")){
+            System.out.println("You view your weapon stats. Your sword has " + p.getSword().getAttack()  + " attack and " + p.getSword().getDodge() + " dodge!");
+        }
+        if (choice.equals("S") || choice.equals("s")){
+            int num = (int)(Math.random() * 2) + 1;
+            if (num == 1){
+                System.out.println("You searched the room and found a health potion!");
+                currentRoom.setSearched(true);
+                System.out.println("Would you like to use it now? (y/n)");
+                String choice2 = scan.nextLine();
+                if (choice2.equals("y") || choice2.equals("Y")){
+                    System.out.println("You used the health potion and regained 20 health!");
+                    p.changeHealth(20);
+                } else {
+                    if (p.hasHealthPot()){
+                        System.out.println("Oh no! You already have a health potion and you can only carry one.");
+                        System.out.println("You realize you have no choice but to use the potion and regain 20 health!");
+                        p.changeHealth(20);
+                    } else {
+                        System.out.println("You store the health potion away for later.");
+                        p.setHealthPotStatus(true);
+                    }
+                }
+            }
+        }
     }
 
+    private boolean allDragonsSlain(){
+        for (int i = 0; i < currentRoom.getDragons().length; i++){
+            if (!(currentRoom.getDragons()[i].isDead())){
+                return false;
+            }
+        }
+        return true;
+    }
     private void determineReward(){
         int reward = (int)(Math.random() * 4) + 1;
         if (reward == 1){

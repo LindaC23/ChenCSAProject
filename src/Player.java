@@ -28,6 +28,9 @@ public class Player{
         return health;
     }
 
+    public boolean hasHealthPot(){return healthPotStatus;}
+
+    public void setHealthPotStatus(boolean newHealthPotStatus){ healthPotStatus = newHealthPotStatus;}
     public void setGold(int newGold){
         gold = newGold;
     }
@@ -38,7 +41,7 @@ public class Player{
 
     // method that determines the player's attack amount
     public int dealDamage(){
-        return ((int)(Math.random() * 5) + 1) * sword.getAttack();
+        return ((int)(Math.random() * 10) + 1) * sword.getAttack();
     }
 
     public void changeHealth(int change){

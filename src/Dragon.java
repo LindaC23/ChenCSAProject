@@ -34,11 +34,11 @@ public class Dragon{
 
     public int dealDamage(){
         if (level == 1){
-            return (int)(Math.random() * 15) + 5;
+            return (int)(Math.random() * 5) + 1;
          } else if (level == 2){
-            return (int)(Math.random() * 25) + 10;
+            return (int)(Math.random() * 15) + 5;
         } else {
-            return (int)(Math.random() * 35) + 20;
+            return (int)(Math.random() * 20) + 10;
         }
     }
 

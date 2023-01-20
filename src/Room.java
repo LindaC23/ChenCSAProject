@@ -32,6 +32,7 @@ public class Room{
         return cleared;
     }
 
+    public void setSearched(boolean newSearched){ searched = newSearched;}
     public boolean isSearched(){
         return searched;
     }
