@@ -1,7 +1,7 @@
 public class Dragon{
     // instance variables
     private int health;
-    private int level;
+    private final int level;
     private boolean dead;
 
     // constructor
@@ -38,9 +38,9 @@ public class Dragon{
         if (level == 1){
             return (int)(Math.random() * 5) + 1;
          } else if (level == 2){
-            return (int)(Math.random() * 10) + 1;
+            return (int)(Math.random() * 10) + 5;
         } else {
-            return (int)(Math.random() * 15) + 1;
+            return (int)(Math.random() * 15) + 10;
         }
     }
 

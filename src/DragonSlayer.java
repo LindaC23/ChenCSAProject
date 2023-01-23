@@ -64,20 +64,9 @@ public class DragonSlayer {
                     System.out.print("What's your next move? ");
                     String choice2 = scan.nextLine();
                     processChoice(choice2);
-                    if (currentRoom.isCleared() && (roomIndex < rooms.length)) {
-                        System.out.println("You have cleared all the dragons in this room!");
-                        roomsCleared++;
-                        if (roomsCleared < 5){
-                            roomIndex++;
-                            currentDragonsSlain = 0;
-                            dragonIndex = 0;
-                            currentRoom = rooms[roomIndex];
-                            enterRoom();
-                        }
-                    }
                 }
                 if (p.getHealth() < 0){
-                    System.out.println("You have died!");
+                    System.out.println("You got killed by the dragon! You are unable to clear all 5 rooms.");
                 } else {
                     System.out.println("Congratulations, you have cleared all the rooms!");
                 }
@@ -125,7 +114,9 @@ public class DragonSlayer {
         System.out.println("(I)nspect dragon's level");
         System.out.println("(C)heck health");
         System.out.println("(V)iew weapon stats");
+        System.out.println("(U)se health potion");
         System.out.println("(S)earch room");
+        System.out.println("(E)nter next room");
         System.out.println("------------------------------");
     }
 
@@ -135,39 +126,57 @@ public class DragonSlayer {
         Scanner scan = new Scanner(System.in);
         System.out.println();
         if (choice.equals("A") || choice.equals("a")) {
-            int dmg = p.dealDamage();
-            System.out.println("You deal " + dmg + " damage to the dragon!");
-            currentDragon.takeDamage(dmg);
-            System.out.println("The dragon now has " + currentDragon.getHealth() + " health.");
-            if (currentDragon.isDead()) {
-                currentDragonsSlain++;
-                System.out.println("You have successfully slain a dragon!");
-                determineReward();
-                if (currentRoom.getNumDragons() > 1 && currentDragonsSlain != currentRoom.getNumDragons() && dragonIndex < currentRoom.getDragons().length) {
-                    System.out.println("You have slain " + currentDragonsSlain + "/" + currentRoom.getNumDragons() + " of the dragons!");
-                    dragonIndex++;
-                    currentDragon = currentRoom.getDragons()[dragonIndex];
-                }
+            if (currentRoom.isCleared()){
+                System.out.println("You have already slain all the dragons in this room.");
             } else {
-                int dragonDmg = currentDragon.dealDamage();
-                int dodgeChance = (int)(Math.random() * 100) + 1;
-                if (dodgeChance > 20){
-                    System.out.println("The dragon attacks you for " + dragonDmg + " damage points!");
-                    p.changeHealth(-1 * dragonDmg);
-                    System.out.println("You now have " + p.getHealth() + " health.");
+                int dmg = p.dealDamage();
+                System.out.println("You deal " + dmg + " damage to the dragon!");
+                currentDragon.takeDamage(dmg);
+                System.out.println("The dragon now has " + currentDragon.getHealth() + " health.");
+                if (currentDragon.isDead()) {
+                    currentDragonsSlain++;
+                    System.out.println("You have successfully slain a dragon!");
+                    determineReward();
+                    if (currentRoom.getNumDragons() > 1 && currentDragonsSlain != currentRoom.getNumDragons() && dragonIndex < currentRoom.getDragons().length) {
+                        System.out.println("You have slain " + currentDragonsSlain + "/" + currentRoom.getNumDragons() + " of the dragons!");
+                        dragonIndex++;
+                        currentDragon = currentRoom.getDragons()[dragonIndex];
+                    }
                 } else {
-                    System.out.println("The dragon attempts to attack you, but you dodged!");
+                    int dragonDmg = currentDragon.dealDamage();
+                    int dodgeChance = (int)(Math.random() * 100) + 1;
+                    if (dodgeChance > 20){
+                        System.out.println("The dragon attacks you for " + dragonDmg + " damage points!");
+                        p.changeHealth(-1 * dragonDmg);
+                        System.out.println("You now have " + p.getHealth() + " health.");
+                    } else {
+                        System.out.println("The dragon attempts to attack you, but you dodged!");
+                    }
                 }
             }
         }
         if (choice.equals("I") || choice.equals("i")) {
-            System.out.println("You inspect the dragon's level. It appears to be a level " + currentDragon.getLevel() + " dragon!");
+            if (currentRoom.isCleared()){
+                System.out.println("You have already slain all the dragons in this room.");
+            } else {
+                System.out.println("You inspect the dragon's level. It appears to be a level " + currentDragon.getLevel() + " dragon!");
+            }
         }
         if (choice.equals("C") || choice.equals("c")) {
             System.out.println("You check your health. You are at " + p.getHealth() + " health!");
         }
         if (choice.equals("V") || choice.equals("v")) {
             System.out.println("You view your weapon stats. Your sword has " + p.getSword().getAttack() + " attack and " + p.getSword().getDodge() + " dodge!");
+        }
+        if (choice.equals("U") || choice.equals("u")){
+            if (p.hasHealthPot()){
+                System.out.println("You used the health potion and regained " + (100 - p.getHealth())/2 + " health!");
+                p.changeHealth((100 - p.getHealth())/2 );
+                p.setHealthPotStatus(false);
+                System.out.println("You are now at " + p.getHealth() + " health!");
+            } else {
+                System.out.println("You do not currently have a health potion!");
+            }
         }
         if (choice.equals("S") || choice.equals("s")) {
             int num = (int) (Math.random() * 2) + 1;
@@ -204,6 +213,25 @@ public class DragonSlayer {
                 }
             } else {
                 System.out.println("You search the room, but there is nothing to be found.");
+            }
+        }
+        if (choice.equals("E") || choice.equals("e")){
+            if (currentRoom.isCleared() && (roomIndex < rooms.length)) {
+                roomsCleared++;
+                if (roomsCleared == 5){
+                    System.out.println("You have finished traversing the dragon's lair!");
+                } else {
+                    System.out.println("You move onto the next room");
+                    if (roomsCleared < 5){
+                        roomIndex++;
+                        currentDragonsSlain = 0;
+                        dragonIndex = 0;
+                        currentRoom = rooms[roomIndex];
+                        enterRoom();
+                    }
+                }
+            } else {
+                System.out.println("You try to enter the next room, but a dragon stands in your way!");
             }
         }
     }
