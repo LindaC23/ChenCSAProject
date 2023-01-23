@@ -29,9 +29,15 @@ public class Room{
     }
 
     public boolean isCleared(){
-        return cleared;
+        for (int i = 0; i < dragons.length; i++){
+            if (!(dragons[i].isDead())){
+                return false;
+            }
+        }
+        return true;
     }
 
+    // other public methods
     public void setSearched(boolean newSearched){ searched = newSearched;}
     public boolean isSearched(){
         return searched;

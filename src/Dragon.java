@@ -27,18 +27,20 @@ public class Dragon{
     // method that decreases the dragon's health from an attack
     public void takeDamage (int atkDmg){
         health -= atkDmg;
-        if (health == 0){
+        if (health <= 0){
+            health = 0;
             dead = true;
         }
     }
 
+    // method that determines the amount of damage that the dragon deals, varies depending on its level
     public int dealDamage(){
         if (level == 1){
             return (int)(Math.random() * 5) + 1;
          } else if (level == 2){
-            return (int)(Math.random() * 15) + 5;
+            return (int)(Math.random() * 10) + 1;
         } else {
-            return (int)(Math.random() * 20) + 10;
+            return (int)(Math.random() * 15) + 1;
         }
     }
 

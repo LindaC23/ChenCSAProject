@@ -44,10 +44,13 @@ public class Player{
         return ((int)(Math.random() * 10) + 1) * sword.getAttack();
     }
 
+    // adds the value change to the health of the player
+    // if the health exceeds 100, it gets set back to 100
+    // if the health is lower than 0, it gets set to 0
     public void changeHealth(int change){
-        if ((health += change) > 100){
+        if ((health + change) > 100){
             health = 100;
-        } else if ((health += change) < 0){
+        } else if ((health + change) < 0){
             health = 0;
         } else {
             health += change;
